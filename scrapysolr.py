@@ -29,7 +29,7 @@ class SolrPipeline(object):
             if type(src) is str:
                 solr_item[dst] = item[src] if src in item else None
             elif type(src) is list:
-                solr_item[dst] = filter(None, [item[i] if i in item else None for i in src])
+                solr_item[dst] = [item[i] if i in item else None for i in src]
             else:
                 assert False
                 
