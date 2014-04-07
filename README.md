@@ -12,10 +12,15 @@ Configure your settings.py:
       'scrapysolr.SolrPipeline',
     ]
     
-    APPERYIO_DB_ID = '1234abcdef1234abcdef1234'
-    APPERYIO_USERNAME = 'user'
-    APPERYIO_PASSWORD = 'pass'
-    APPERYIO_COLLECTION_NAME = 'collection'
+    SOLR_URL = 'http://urlofyoursolrserver/solr'
+    SOLR_MAPPING = {
+      'id': 'url',
+      'text': ['title', 'breadcrumbs', 'description'],
+      'description': 'description',
+      'keywords': 'breadcrumbs',
+      'price': 'price',
+      'title': 'title'
+    }
 
 Changelog
 =========

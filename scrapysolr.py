@@ -14,25 +14,24 @@
 
 """Solr Pipeline for scrapy"""
 
-import json
-import requests
+import pysolr
 from scrapy.conf import settings
 
 class SolrPipeline(object):
 
     def __init__(self):
-	url = "https://api.appery.io/rest/1/db/login"
-	headers = { "X-Appery-Database-Id": settings['APPERYIO_DB_ID'] }
-	params = { "username": settings['APPERYIO_USERNAME'], "password": settings['APPERYIO_PASSWORD'] }
-	v = requests.get(url, headers=headers, params=params)
-        self.sessionToken = v.json()['sessionToken']
+        self.mapping = settings['SOLR_MAPPING'].items()
+        self.solr = pysolr.Solr(settings['SOLR_URL'], timeout=10)
 
     def process_item(self, item, spider):
-        url = "https://api.appery.io/rest/1/db/collections/%s" % settings['APPERYIO_COLLECTION_NAME']
-	headers = {
-		'Content-type': 'application/json',
-		'X-Appery-Database-Id': settings['APPERYIO_DB_ID'],
-		'X-Appery-Session-Token': self.sessionToken
-	}
-	requests.post(url, data=json.dumps(dict(item)), headers=headers)
-	return item
+        solr_item = {}
+        for dst, src in self.mapping:
+            if type(src) is str:
+                solr_item[dst] = item[src] if src in item else None
+            elif type(src) is list:
+                solr_item[dst] = filter(None, [item[i] if i in item else None for i in src])
+            else:
+                assert False
+                
+        self.solr.add([solr_item])
+        return item
