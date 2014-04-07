@@ -22,6 +22,8 @@ Configure your settings.py:
       'title': 'title'
     }
 
+The SOLR_MAPPING setting, maps your item's fields to Solr fields. Usually some transformations will be needed e.g. a url might be used as Solr id. You can use multiple Scrapy fields for a single Solr field as you can see in the 'text' mapping above. The 'text' happens to be the default field for the default Solr schema and as a result you can use it to simplify your queries (since you don't have to include the field if you want to match everything).
+
 Changelog
 =========
 
