@@ -1,6 +1,6 @@
 from distutils.core import setup
 setup(name='scrapysolr',
-      version='0.1.0',
+      version='0.2.0',
       license='Apache License, Version 2.0',
       description='Scrapy pipeline which allows you to store scrapy items in a Solr server.',
       author='Dimitrios Kouzis-Loukas',
